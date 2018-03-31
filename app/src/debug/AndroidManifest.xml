@@ -1,0 +1,10 @@
+<manifest
+    package="org.xdty.template"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:name="org.xdty.template.application.DebugApplication"
+        tools:replace="android:name"/>
+
+</manifest>
