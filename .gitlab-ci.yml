@@ -13,4 +13,5 @@ build:
     - ./gradlew assembleRelease
   artifacts:
     paths:
-      - "**/build/outputs/**/*.apk"
+      - "**/build/outputs/apk/**/*.apk"
+      - "**/build/outputs/mapping/release/mapping.txt"
