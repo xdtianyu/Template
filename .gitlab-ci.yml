@@ -6,6 +6,7 @@ before_script:
   - openssl aes-256-cbc -K $encrypted_key -iv $encrypted_iv -in release.jks.enc -out release.jks -d
 stages:
   - build
+  - deploy
 build:
   stage: build
   script:
@@ -15,3 +16,15 @@ build:
     paths:
       - "**/build/outputs/apk/**/*.apk"
       - "**/build/outputs/mapping/release/mapping.txt"
+    expire_in: 1 day
+release:
+  stage: deploy
+  script:
+    - cp app/build/outputs/apk/release/*.apk .
+    - cp app/build/outputs/mapping/release/mapping.txt .
+  artifacts:
+    paths:
+      - "*.apk"
+      - "mapping.txt"
+  only:
+    - tags
