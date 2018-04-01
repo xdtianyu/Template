@@ -7,9 +7,10 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import org.xdty.template.utils.OkHttp;
 
-import rx.Observable;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Completable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Action;
+import io.reactivex.schedulers.Schedulers;
 
 public class DebugApplication extends Application {
     private final static String TAG = DebugApplication.class.getSimpleName();
@@ -28,9 +29,10 @@ public class DebugApplication extends Application {
                 //.penaltyDeath()
                 .build());
 
-        Observable.<Void>just(null).observeOn(Schedulers.io()).subscribe(new Action1<Void>() {
+        CompositeDisposable disposable = new CompositeDisposable();
+        disposable.add(Completable.complete().subscribeOn(Schedulers.io()).subscribe(new Action() {
             @Override
-            public void call(Void aVoid) {
+            public void run() throws Exception {
                 Stetho.initialize(
                         Stetho.newInitializerBuilder(DebugApplication.this)
                                 .enableDumpapp(
@@ -39,7 +41,8 @@ public class DebugApplication extends Application {
                                         DebugApplication.this))
                                 .build());
             }
-        });
+        }));
+        disposable.dispose();
 
         OkHttp.getInstance().addNetworkInterceptor(new StethoInterceptor());
 

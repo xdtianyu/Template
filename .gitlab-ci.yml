@@ -1,0 +1,16 @@
+image: xdtianyu/docker:openjdk8
+before_script:
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
+  - source /opt/setup-android-sdk.sh
+  - openssl aes-256-cbc -K $encrypted_key -iv $encrypted_iv -in release.jks.enc -out release.jks -d
+stages:
+  - build
+build:
+  stage: build
+  script:
+    - ./gradlew assembleDebug
+    - ./gradlew assembleRelease
+  artifacts:
+    paths:
+      - "**/build/outputs/**/*.apk"
